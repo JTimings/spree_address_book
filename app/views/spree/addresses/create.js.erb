@@ -1,0 +1,11 @@
+$("#flash-messages").html("<%= escape_javascript(render(:partial => "spree/shared/message")) %>").show().delay(3000).fadeOut(500);
+$("#user-addresses-list").html("<%= escape_javascript(render(:partial => "spree/users/address_list")) %>");
+<% if @new_default_address %>	
+	if ($("#order_ship_address_id").length) {
+		$("#order_ship_address_id").val('<%= j spree_current_user.ship_address_id.to_s %>');
+        $("#order_bill_address_id").val('<%= j spree_current_user.bill_address_id.to_s %>');
+        $('#checkout_form_address').submit();
+	}	
+	checkout_spinner();
+<% end %>
+$('#address_modal').modal('toggle')

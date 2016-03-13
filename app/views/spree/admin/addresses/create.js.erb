@@ -1,0 +1,16 @@
+$("#admin_user_address_errors").html("<%= escape_javascript(render(:partial => 'spree/shared/error_messages', :locals => { :target => @address })) %>");
+
+<% if @new_default_address %>
+	show_flash('success', "<%= j Spree.t('new_user_address_created') %>")
+	$("#admin_user_address_list").html("<%= escape_javascript(render(:partial => 'spree/admin/addresses/user_address_list' )) %>");
+	$("#admin_user_address_list").removeClass("hidden");
+	$("#admin_user_new_address").removeClass("hidden");
+	$("#admin_user_address_form").addClass("hidden");
+<% else %>
+	$("#admin_user_address_form").html("<%= escape_javascript(render(:partial => 'spree/admin/addresses/user_address_form', :locals => { :address => @address, :user => @user })) %>");
+
+	$('#user_binstructions_').select2({placeholder: 'Select instruction'})
+	$('#user_binstructions_').select2({}).select2('val', $('#user_baddress_specific_instructions').data('instructions')); 
+
+	all_google_maps();
+<% end %>

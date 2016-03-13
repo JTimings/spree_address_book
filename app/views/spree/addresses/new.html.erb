@@ -1,20 +1,29 @@
-<% content_for :head do %>
-  <%= javascript_include_tag states_url(:format => :js) %>
-  <%= javascript_include_tag countries_url(:format => :js) %>
-<% end %>
+<div id ="checkout_errors">
+  <%= render :partial => 'spree/shared/error_messages', :locals => { :target => @user } %>
+</div>
+<div class="alt_body_background">
+  <div class="container">
+    <div class="row">
 
-<%= render :partial => 'spree/shared/error_messages', :locals => { :target => @address } %>
-<%= form_for @address, :html => {:id => "checkout_form_address"} do |f| %>
-<fieldset>
-  <%= content_tag(:legend, t(:new_shipping_address, :scope => :address_book)) %>
-  <div class="inner">
-    <%= render :partial => 'spree/addresses/form', :locals => {
-      :address_name => 'address',
-      :address_form => f,
-      :address_type => 'shipping',
-      :address => @address
-    } %>
+      <div class="col-sm-10 col-sm-offset-1">
+
+        <div id="user-address-panel" class="col-sm-6 panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title caps"><%= t(:new_shipping_address, :scope => :address_book).upcase %></h3>
+          </div>
+          <div id="edit-user" class="panel-body" data-hook="login">
+
+            <%= form_for @address, :html => {:id => "checkout_form_address"} do |f| %>
+              <%= render :partial => 'spree/address/form', :locals => { :form => f, :address_type => 'shipping', :address => @address } %>
+              <br>
+              <div id="account_profile_update_btn_row" class="row">
+               <%= f.submit t(:save, :scope => :address_book).upcase, :class => 'btn btn-primary caps pull-right',:id => 'address_save_btn' %>
+              </div> 
+            <% end %>
+
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <%= f.submit t(:save, :scope => :address_book) %>
-</fieldset>
-<% end %>
+</div>

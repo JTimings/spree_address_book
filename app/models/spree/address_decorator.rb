@@ -1,5 +1,5 @@
 (Spree::PermittedAttributes.class_variable_get("@@address_attributes") << [
-  :user_id, :deleted_at
+  :user_id, :deleted_at, :delivery_instructions, :require_cutlery, :floor, :room, :instructions, :place_id
 ]).flatten!
 
 Spree::Address.class_eval do
@@ -45,4 +45,10 @@ Spree::Address.class_eval do
       update_column :deleted_at, Time.now
     end
   end
+
+  private
+    def require_zipcode?
+      false
+    end
+
 end

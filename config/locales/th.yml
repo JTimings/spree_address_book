@@ -1,0 +1,24 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+th:
+  address_book:
+    other_address: "ที่อยู่จัดส่งอื่น"
+    add_new_shipping_address: "เพิ่มเติมที่อยู่จัดส่ง"
+    new_shipping_address: "ที่อยู่จัดส่งใหม่"
+    edit_shipping_address: "แก้ไขที่อยู่จัดส่ง"
+    no_shipping_addresses_on_file: "ไม่มีที่อยู่จัดส่งบันทึกไว้"
+    shipping_addresses: "ที่อยู่จัดส่ง"
+    successfully_saved: "ทำการบันทึกเรียบร้อยแล้ว"
+    unsuccessfully_saved: "เกิดปัญหาระหว่างการบันทึกที่อยู่จัดส่ง"
+    successfully_updated: "ทำการแก้ไขเรียบร้อยแล้ว"
+    unsuccessfully_updated: "เกิดข้อผิดพลาดระหว่างการแก้ไขข้อมูลที่อยู่จัดส่ง"
+    save: "บันทึกที่อยู่จัดส่ง"
+    add: "เพิ่มที่อยู่จัดส่ง"
+    new_user_address_created: "ที่อยู่จัดส่งใหม่ได้ถูกบันทึกไว้เรียบร้อยแล้ว"
+    user_address_deleted: "ที่อยู่จัดส่งได้ถูกลบเรียบร้อยแล้ว"
+    user_address_not_deleted: "เกิดปัญหาระหว่างการลบที่อยู่จัดส่ง"
+    user_address_update_success: "ได้ทำการแก้ไขที่อยู่จัดส่งเรียบร้อยแล้ว"
+    user_address_update_error: "เกิดข้อผิดพลาดระหว่างการแก้ไขข้อมูลที่อยู่จัดส่ง"
+    user_address_updated: "ทำการแก้ไขที่อยู่จัดส่งเรียบร้อยแล้ว"
+    user_address_not_updated: "เกิดปัญหาระหว่างการแก้ไขข้อมูลที่อยู่จัดส่ง"

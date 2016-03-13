@@ -1,0 +1,15 @@
+$("#address-modal-col").html("<%= escape_javascript(render(:partial => "spree/users/address_form", :locals => { :address => @address })) %>");
+
+$("#address-modal-header .modal-title").text("<%= j t(:new_shipping_address, :scope => :address_book).upcase %>")
+$("#address_update_btn").val("<%= j t(:add, :scope => :address_book).upcase %>")
+$("#address_delete_btn").addClass("hidden")
+address_instructions_counter();
+$("#address_zipcode").numeric();
+$("#address_phone").numeric();
+
+addressAutocomplete();
+
+$('#address_modal').modal('toggle');
+
+// to avoid map in modal bug
+resizeMap();

@@ -1,0 +1,18 @@
+<fieldset style="border:none" class="alpha two columns"></fieldset>
+<div class="omega six columns">
+  <% @user = user %>
+  <% @address = address %>
+  <%= form_for [:admin, @address], :html => {:id => ""}, :remote => true do |f| %>
+    <%= render :partial => 'spree/admin/shared/address_form', :locals => { :f => f, :type => "billing" } %>
+
+    <div data-hook="">
+      <div class="form-buttons filter-actions actions" data-hook="buttons">
+        <button id="user_address_form_update_btn" class="icon-refresh button" name="button" type="submit">Update</button>
+        <span class="or">or</span>
+        <a id="user_address_form_cancel_btn" class="button icon-remove" href="#" icon="icon-remove">Cancel</a>
+      </div>
+    </div>
+
+  <% end %>
+
+</div>

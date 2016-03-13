@@ -1,0 +1,11 @@
+$("#admin_user_address_list").addClass("hidden");
+$("#admin_user_new_address").addClass("hidden");
+
+$("#admin_user_address_form").html("<%= escape_javascript(render(:partial => 'spree/admin/addresses/user_address_form', :locals => { :address => @address, :user => @user })) %>");
+$("#user_address_form_update_btn").text('SAVE');
+$("#admin_user_address_form").removeClass("hidden");
+
+$('#user_binstructions_').select2({placeholder: 'Select instruction'})
+$('#user_binstructions_').select2({}).select2('val', $('#user_baddress_specific_instructions').data('instructions')); 
+
+all_google_maps();

@@ -1,0 +1,57 @@
+<% if @user.addresses.present? %>
+  
+	<table class="index" id='' data-hook>
+	  <colgroup>
+	    <col style="width: 65%" />
+	    <col style="width: 15%" />
+	    <col style="width: 20%" />
+	  </colgroup>
+	  <thead>
+	    <tr class="align-center" data-hook="">
+	      <th><%= Spree.t(:address) %></th>
+	      <th><%= Spree.t(:default) %></th>
+	      <th class="actions"></th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    <% @user.addresses.sort_by(&:created_at).each_with_index do |address,i| %>
+	      <tr id="<%= spree_dom_id address %>" data-hook="" class="<%= cycle('odd', 'even')%>">
+	        <td class="align-left">
+	        	<p>
+				      <span class="">
+				        <% unless address.company.blank? %><%= address.company %><br><% end %>
+				        <%= address.address1 %>
+				      </span>
+				      <br>
+				      <% fl_blank = address.floor.blank? %>
+				      <% rm_blank = address.room.blank? %>
+				      <% unless ( fl_blank && rm_blank ) %>
+				        <%= ( Spree.t(:floor) + ": " + address.floor ) unless fl_blank %><% if rm_blank %><br><% end %><% unless rm_blank %><% unless fl_blank %>,&nbsp;<% end %><%= ( Spree.t(:room_apt) + ": " + address.room ) %><br><% end %>
+				      <% end %>
+				      <span class="">
+				        <% unless (address.delivery_instructions.blank? and address.instructions.blank? ) %>
+				          <% instr = address.instructions.split("").map {|i| i.to_i} %>
+				          <span class=""><i>
+				          <% instr_format = instr.present? ? (address_instruction_options[instr.first..instr.last].join(". ") + '. ') : ""  %>
+				          <%= truncate(instr_format + address.delivery_instructions, :length => 60 ) %></span></i>
+				          <br>
+				        <% end %>
+				      </span>
+				    </p>
+	        </td>
+	        <td class="align-center"><%= address.id == @user.ship_address_id ? Spree.t(:say_yes) : Spree.t(:say_no) %></td>
+	        <td class="actions">
+	        	<%= link_to_with_icon "icon-capture", Spree.t(:default), '#', {:class => "admin_user_address_make_default", :'data-address-id' => address.id, :'data-user-id' => @user.id, :'data-action' => "capture", :no_text => true} %>
+	          <%= link_to_with_icon "icon-edit", Spree.t(:edit), {:controller => "addresses", :action => "edit", :id => address.id, :user_id => @user.id, :remote => true}, {:'data-action' => "edit", :no_text => true} %>  
+	          <%= link_to_with_icon "icon-trash", Spree.t(:delete), {:controller => "addresses", :action => "destroy", :id => address.id, :user_id => @user.id, :remote => true}, {:class => "delete-resource", :'data-action' => "remove", :'data-confirm' => "Are you sure?", :no_text => true} %> 
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+
+<% else %>
+  <div class="alpha twelve columns no-objects-found">
+    <%= Spree.t(:no_resource_found, resource: I18n.t(:other, scope: 'activerecord.models.spree/address')) %>,
+    <%= link_to Spree.t(:add_one), spree.new_address_path %>!
+  </div>
+<% end %>

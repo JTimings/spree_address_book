@@ -1,0 +1,5 @@
+$("#admin_user_address_errors").html("<%= escape_javascript(render(:partial => 'spree/shared/error_messages', :locals => { :target => @address })) %>");
+$("#admin_user_address_list").html("<%= escape_javascript(render(:partial => 'spree/admin/addresses/user_address_list' )) %>");
+$("#admin_user_address_list").removeClass("hidden");
+$("#admin_user_new_address").removeClass("hidden");
+$("#admin_user_address_form").addClass("hidden");

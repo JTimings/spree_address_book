@@ -1,16 +1,7 @@
-$("#billing_address_<%= @address.id %>").fadeOut();
-$("#shipping_address_<%= @address.id %>").fadeOut();
+$("#flash-messages").html("<%= escape_javascript(render(:partial => "spree/shared/message")) %>").show().delay(3000).fadeOut(500);
 $("#user-addresses-list").html("<%= escape_javascript(render(:partial => "spree/users/address_list")) %>");
-<% if @no_addresses %>
-	if($("#order_ship_address_id").length) {
-		$('#checkout_form_reset').submit();
-		$("#order_ship_address_id").val(""); // clear hidden checkout address ids too.
-		$("#order_bill_address_id").val("");
-	}	
-	checkout_spinner();
-<% end %>
 <% if @new_default_address %>
-	if($("#order_ship_address_id").length) {
+	if ($("#order_ship_address_id").length) {
 		$("#order_ship_address_id").val('<%= j spree_current_user.ship_address_id.to_s %>');
         $("#order_bill_address_id").val('<%= j spree_current_user.bill_address_id.to_s %>');
         $('#checkout_form_address').submit();
