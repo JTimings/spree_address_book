@@ -32,7 +32,7 @@
 				        <% unless (address.delivery_instructions.blank? and address.instructions.blank? ) %>
 				          <% instr = address.instructions.split("").map {|i| i.to_i} %>
 				          <span class=""><i>
-				          <% instr_format = instr.present? ? (address_instruction_options[instr.first..instr.last].join(". ") + '. ') : ""  %>
+				          <% instr_format = instr.present? ? (address_instruction_options.values_at(*instr).join(". ") + '. ') : ""  %>
 				          <%= truncate(instr_format + address.delivery_instructions, :length => 60 ) %></span></i>
 				          <br>
 				        <% end %>
