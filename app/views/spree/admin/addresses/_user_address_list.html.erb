@@ -14,7 +14,7 @@
 	    </tr>
 	  </thead>
 	  <tbody>
-	    <% @user.addresses.sort_by(&:created_at).each_with_index do |address,i| %>
+	    <% @user.addresses.sort_by(&:created_at).uniq(&:id).each do |address| %>
 	      <tr id="<%= spree_dom_id address %>" data-hook="" class="<%= cycle('odd', 'even')%>">
 	        <td class="align-left">
 	        	<p>
@@ -23,11 +23,14 @@
 				        <%= address.address1 %>
 				      </span>
 				      <br>
-				      <% fl_blank = address.floor.blank? %>
-				      <% rm_blank = address.room.blank? %>
-				      <% unless ( fl_blank && rm_blank ) %>
-				        <%= ( Spree.t(:floor) + ": " + address.floor ) unless fl_blank %><% if rm_blank %><br><% end %><% unless rm_blank %><% unless fl_blank %>,&nbsp;<% end %><%= ( Spree.t(:room_apt) + ": " + address.room ) %><br><% end %>
-				      <% end %>
+				      <% tw_blank = address.tower.blank? %>
+			        <% fl_blank = address.floor.blank? %>
+			        <% rm_blank = address.room.blank? %>
+			        <% unless ( tw_blank && fl_blank && rm_blank ) %>
+			          <%= ( Spree.t(:tower) + ": " + address.tower ) unless tw_blank %><% if (fl_blank && rm_blank) %><br><% end %><% unless (fl_blank && rm_blank) %><% unless tw_blank %>,&nbsp;<% end %>
+			          <%= ( Spree.t(:floor) + ": " + address.floor ) unless fl_blank %><% if rm_blank %><br><% end %><% unless rm_blank %><% unless fl_blank %>,&nbsp;<% end %>
+			          <%= ( Spree.t(:room_apt) + ": " + address.room ) %><br><% end %><% end %>
+			        <% end %>
 				      <span class="">
 				        <% unless (address.delivery_instructions.blank? and address.instructions.blank? ) %>
 				          <% instr = address.instructions.split("").map {|i| i.to_i} %>

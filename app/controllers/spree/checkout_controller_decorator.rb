@@ -3,6 +3,12 @@ Spree::CheckoutController.class_eval do
   
   #after_filter :normalize_addresses, :only => :update
   #before_filter :set_addresses, :only => :update
+
+  def add_address_local_and_coords(address)
+    g = Spree::AddressBook::GoogleMaps.new(Spree::Config[:local_locale])
+    success, local_add, lat, lng = g.placedetails(address.place_id) rescue [false,"",0.0,0.0]
+    address.update_attributes({address_local: local_add, lat: lat, lng: lng}) if success
+  end
   
   protected
   

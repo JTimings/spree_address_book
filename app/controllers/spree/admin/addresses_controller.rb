@@ -12,6 +12,9 @@ module Spree
       end
 
       def create
+        # get address in local language and add to params (via another call to maps places api)
+        populate_address_local(params)
+
         @address = @user.addresses.build(address_params)
         if @address.save   
           @user.ship_address = @user.bill_address = @address
@@ -31,6 +34,9 @@ module Spree
 
       def update
         @address = Spree::Address.find(params[:id])
+        if params[:address][:place_id] != @address.place_id
+          populate_address_local(params)
+        end
         if @address.editable?
           if @address.update_attributes(address_params)
             if @address.id == @user.ship_address_id
@@ -92,7 +98,11 @@ module Spree
         end
 
         def address_params
-          params.require(:address).permit(:firstname, :lastname, :company, :address1, :address2, :city, :state_name, :state_id, :zipcode, :country_id, :phone, :delivery_instructions, :require_cutlery, :place_id, :floor, :room, :instructions)
+          # make sure place_id and street address are within str limit
+          params[:address][:address1] = params[:address][:address1].truncate(255)
+          params[:address][:place_id] = params[:address][:place_id].truncate(255)
+
+          params.require(:address).permit(:firstname, :lastname, :company, :address1, :address2, :city, :state_name, :state_id, :zipcode, :country_id, :phone, :delivery_instructions, :require_cutlery, :place_id, :floor, :room, :instructions, :tower, :lat, :lng, :address_local)
         end
 
         def instructions_idx_only
@@ -101,6 +111,12 @@ module Spree
           else
             params[:address][:instructions] = ""
           end
+        end
+
+        def populate_address_local(params)
+          g = Spree::AddressBook::GoogleMaps.new(Spree::Config[:local_locale])
+          success, local_add, lat, lng = g.placedetails(params[:address][:place_id]) rescue [false,"",0.0,0.0]
+          (params[:address][:address_local] = local_add) if success
         end
 
     end

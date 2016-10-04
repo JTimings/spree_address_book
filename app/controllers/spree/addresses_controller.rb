@@ -10,8 +10,11 @@ class Spree::AddressesController < Spree::StoreController
   end
 
   def create
+    # get address in local language and add to params (via another call to maps places api)
+    populate_address_local(params)
+
     @address = spree_current_user.addresses.build(address_params)
-    if @address.save   
+    if @address.save  
       spree_current_user.ship_address = spree_current_user.bill_address = @address
       if spree_current_user.save
         @new_default_address = true
@@ -39,6 +42,9 @@ class Spree::AddressesController < Spree::StoreController
   end
 
   def update
+    if params[:address][:place_id] != @address.place_id
+      populate_address_local(params)
+    end
     if @address.editable?
       if @address.update_attributes(address_params)
         if @address.id == spree_current_user.ship_address_id
@@ -102,7 +108,11 @@ class Spree::AddressesController < Spree::StoreController
   private
 
     def address_params
-      params.require(:address).permit(:firstname, :lastname, :company, :address1, :address2, :city, :state_name, :state_id, :zipcode, :country_id, :phone, :delivery_instructions, :require_cutlery, :place_id, :floor, :room, :instructions)
+      # make sure place_id and street address are within str limit
+      params[:address][:address1] = params[:address][:address1].truncate(255)
+      params[:address][:place_id] = params[:address][:place_id].truncate(255)
+
+      params.require(:address).permit(:firstname, :lastname, :company, :address1, :address2, :city, :state_name, :state_id, :zipcode, :country_id, :phone, :delivery_instructions, :require_cutlery, :place_id, :floor, :room, :instructions, :tower, :lat, :lng, :address_local)
     end
 
     def accurate_title
@@ -115,6 +125,12 @@ class Spree::AddressesController < Spree::StoreController
       else
         params[:address][:instructions] = ""
       end
+    end
+
+    def populate_address_local(params)
+      g = Spree::AddressBook::GoogleMaps.new(Spree::Config[:local_locale])
+      success, local_add, lat, lng = g.placedetails(params[:address][:place_id]) rescue [false,"",0.0,0.0]
+      ( params[:address].merge!(address_local: local_add) ) if success
     end
 
 end
